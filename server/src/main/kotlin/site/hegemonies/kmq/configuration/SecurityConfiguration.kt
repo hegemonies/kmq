@@ -1,4 +1,4 @@
 package site.hegemonies.kmq.configuration
 
-class SecurityConfiguratin {
+class SecurityConfiguration {
 }

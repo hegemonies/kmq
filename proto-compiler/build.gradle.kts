@@ -1,0 +1,86 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.google.protobuf.gradle.*
+
+val coroutineVersion = "1.7.0-Beta"
+val grpcVersion = "1.53.0"
+val protobufVersion = "0.9.2"
+val protobufUtilsVersion = "3.22.2"
+val grpcKotlinVersion = "1.3.0"
+
+plugins {
+    id("org.jetbrains.kotlin.jvm") version "1.8.10"
+    id("com.google.protobuf") version "0.9.2"
+
+    id("org.graalvm.buildtools.native") version "0.9.20"
+}
+
+group = "site.hegemonies"
+version = "0.0.1"
+java.sourceCompatibility = JavaVersion.VERSION_17
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+dependencies {
+    // Kotlin
+    implementation(kotlin("stdlib"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
+
+    // Grpc
+//    api("io.grpc:grpc-stub:$grpcVersion")
+    implementation("com.google.protobuf:protobuf-java-util:$protobufUtilsVersion")
+    implementation("com.google.protobuf:protobuf-kotlin:$protobufUtilsVersion")
+    implementation("io.grpc:grpc-protobuf:$grpcVersion")
+    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
+
+    // Protobuf
+    protobuf(files("../proto-contracts"))
+
+    // Java
+    api("javax.annotation:javax.annotation-api:1.3.2")
+}
+
+java {
+    withSourcesJar()
+}
+
+protobuf {
+    val classifier = protocClassifier()
+    protoc {
+        artifact = "com.google.protobuf:protoc:$protobufUtilsVersion:$classifier"
+    }
+    plugins {
+        id("grpc") {
+            artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion:$classifier"
+        }
+        id("grpckt") {
+            artifact = "io.grpc:protoc-gen-grpc-kotlin:$grpcKotlinVersion:jdk8@jar"
+        }
+    }
+    generateProtoTasks {
+        all().forEach {
+            it.builtins {
+                create("kotlin")
+            }
+
+            it.plugins {
+                id("grpc")
+                id("grpckt")
+            }
+        }
+    }
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "17"
+    }
+}
+
+// Make protoc work on macOS
+fun protocClassifier(): String {
+    return if (System.getProperty("os.name", "").startsWith("Mac")) "osx-x86_64" else ""
+}

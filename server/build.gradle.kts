@@ -8,6 +8,7 @@ plugins {
     kotlin("plugin.spring") version "1.8.10"
     id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
     id("com.google.cloud.tools.jib") version "3.3.1"
+    id("com.google.protobuf") version "0.9.2"
 }
 
 group = "site.hegemonies"
@@ -30,6 +31,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-Beta")
+
+    // grpc
+    implementation("io.grpc:grpc-stub:1.53.0")
 
     // metrics
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")

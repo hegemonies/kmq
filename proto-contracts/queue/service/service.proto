@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package kmq.queue.service;
+
+option java_multiple_files = true;
+option java_package = "kmq.queue";
+
+import 'queue/message/message.proto';
+
+service QueueService {
+  // manage
+  rpc createQueue(message.CreateQueueRequest) returns (message.CreateQueueResponse);
+
+  // send
+  rpc sendMessage(message.SendMessageRequest) returns (message.SendMessageResponse);
+  rpc sendStreamMessages(stream message.SendMessageRequest) returns (message.SendMessageResponse);
+
+  // receive
+  rpc receiveLastMessage(message.ReceiveLastMessageRequest) returns (message.ReceiveLastMessageResponse);
+  rpc receiveLastBatchMessages(message.ReceiveLastBatchMessagesRequest) returns (message.ReceiveLastBatchMessagesResponse);
+  rpc receiveStreamMessages(stream message.ReceiveLastMessageRequest) returns (message.ReceiveLastMessageResponse);
+  rpc receiveMessageByIndex(message.ReceiveMessageByIndexRequest) returns (message.ReceiveMessageByIndexResponse);
+}

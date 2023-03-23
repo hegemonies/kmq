@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package kmq.queue.message;
+
+option java_multiple_files = true;
+option java_package = "kmq.queue";
+
+message CreateQueueRequest {
+  string queue_name = 1;
+  uint64 capacity = 2;
+  bool persist = 3;
+}
+
+message CreateQueueResponse {
+  ResponseResult result = 1;
+}
+
+message SendMessageRequest {
+  Message message = 1;
+  string queue_name = 2;
+}
+
+message SendMessageResponse {
+  ResponseResult result = 1;
+}
+
+message ReceiveLastMessageRequest {
+  string queue_name = 1;
+}
+
+message ReceiveLastMessageResponse {
+  ResponseResult result = 1;
+  Message message = 2;
+}
+
+message ReceiveLastBatchMessagesRequest {
+  string queue_name = 1;
+}
+
+message ReceiveLastBatchMessagesResponse {
+  ResponseResult result = 1;
+  repeated Message messages = 2;
+}
+
+message ReceiveMessageByIndexRequest {
+  uint64 index = 1;
+  string queue_name = 2;
+}
+
+message ReceiveMessageByIndexResponse {
+  ResponseResult result = 1;
+  repeated Message messages = 2;
+}
+
+message Message {
+  bytes body = 1;
+}
+
+message ErrorResult {
+  enum Code {
+    ERROR_CODE_INVALID = 0;
+    CLIENT_ERROR = 1;
+    INTERNAL_ERROR = 2;
+  }
+
+  Code code = 1;
+  string message = 2;
+  string stacktrace = 3;
+}
+
+message SuccessResult {
+  bool success = 1;
+}
+
+message ResponseResult {
+  oneof result {
+    SuccessResult success = 1;
+    ErrorResult error = 2;
+  }
+}
