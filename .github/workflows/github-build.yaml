@@ -17,6 +17,9 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
+      - name: build proto contracts
+        run: ./gradlew proto-compiler:build
+
       - name: build jvm-mode docker image
         run: ./gradlew jib
 

@@ -86,3 +86,13 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+jib {
+    from {
+        image = "azul/zulu-openjdk:17-latest"
+    }
+
+    to {
+        image = "hegemonies/kmq:$version"
+    }
+}
