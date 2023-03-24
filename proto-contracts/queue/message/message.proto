@@ -7,7 +7,7 @@ option java_package = "site.hegemonies.kmq.queue.contract";
 
 message CreateQueueRequest {
   string queue_name = 1;
-  uint64 capacity = 2;
+  uint32 capacity = 2;
   bool persist = 3;
 }
 
@@ -53,7 +53,7 @@ message ReceiveMessageByIndexResponse {
 }
 
 message Message {
-  bytes body = 1;
+  string body = 1;
 }
 
 message ErrorResult {

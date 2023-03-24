@@ -1,9 +1,11 @@
 package site.hegemonies.kmq.router.grpc
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import net.devh.boot.grpc.server.service.GrpcService
 import site.hegemonies.kmq.queue.contract.CreateQueueRequest
 import site.hegemonies.kmq.queue.contract.CreateQueueResponse
+import site.hegemonies.kmq.queue.contract.ErrorResult
 import site.hegemonies.kmq.queue.contract.QueueServiceGrpcKt
 import site.hegemonies.kmq.queue.contract.ReceiveLastBatchMessagesRequest
 import site.hegemonies.kmq.queue.contract.ReceiveLastBatchMessagesResponse
@@ -13,16 +15,28 @@ import site.hegemonies.kmq.queue.contract.ReceiveMessageByIndexRequest
 import site.hegemonies.kmq.queue.contract.ReceiveMessageByIndexResponse
 import site.hegemonies.kmq.queue.contract.SendMessageRequest
 import site.hegemonies.kmq.queue.contract.SendMessageResponse
+import site.hegemonies.kmq.queue.contract.createQueueResponse
+import site.hegemonies.kmq.queue.contract.errorResult
+import site.hegemonies.kmq.queue.contract.receiveLastMessageResponse
+import site.hegemonies.kmq.queue.contract.responseResult
+import site.hegemonies.kmq.queue.contract.sendMessageResponse
+import site.hegemonies.kmq.queue.contract.successResult
+import site.hegemonies.kmq.service.queue.IQueueService
 
 @GrpcService
-class QueueGrpcRouter : QueueServiceGrpcKt.QueueServiceCoroutineImplBase() {
+class QueueGrpcRouter(
+    grpcCoroutineScope: CoroutineScope,
+    private val queueService: IQueueService
+) : QueueServiceGrpcKt.QueueServiceCoroutineImplBase(grpcCoroutineScope.coroutineContext) {
 
     override suspend fun createQueue(request: CreateQueueRequest): CreateQueueResponse {
-        return super.createQueue(request)
+        queueService.createQueue(request.queueName, request.capacity)
+        return createQueueResponse { result = makeSuccessResponse() }
     }
 
     override suspend fun sendMessage(request: SendMessageRequest): SendMessageResponse {
-        return super.sendMessage(request)
+        queueService.sendMessage(request.queueName, request.message)
+        return sendMessageResponse { result = makeSuccessResponse() }
     }
 
     override suspend fun sendStreamMessages(requests: Flow<SendMessageRequest>): SendMessageResponse {
@@ -30,7 +44,14 @@ class QueueGrpcRouter : QueueServiceGrpcKt.QueueServiceCoroutineImplBase() {
     }
 
     override suspend fun receiveLastMessage(request: ReceiveLastMessageRequest): ReceiveLastMessageResponse {
-        return super.receiveLastMessage(request)
+        val m = queueService.receiveLastMessage(request.queueName).getOrElse { error ->
+            return receiveLastMessageResponse { result = makeErrorResponse(error) }
+        }
+
+        return receiveLastMessageResponse {
+            message = m
+            result = makeSuccessResponse()
+        }
     }
 
     override suspend fun receiveLastBatchMessages(request: ReceiveLastBatchMessagesRequest): ReceiveLastBatchMessagesResponse {
@@ -44,4 +65,15 @@ class QueueGrpcRouter : QueueServiceGrpcKt.QueueServiceCoroutineImplBase() {
     override suspend fun receiveMessageByIndex(request: ReceiveMessageByIndexRequest): ReceiveMessageByIndexResponse {
         return super.receiveMessageByIndex(request)
     }
+
+    private fun makeSuccessResponse() =
+        responseResult { success = successResult { success = true } }
+
+    private fun makeErrorResponse(e: Throwable) =
+        responseResult {
+            error = errorResult {
+                code = ErrorResult.Code.INTERNAL_ERROR
+                message = e.message ?: "Unknown error"
+            }
+        }
 }
