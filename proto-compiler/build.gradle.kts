@@ -1,5 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import com.google.protobuf.gradle.*
+import com.google.protobuf.gradle.id
+import com.google.protobuf.gradle.protobuf
 
 val coroutineVersion = "1.7.0-Beta"
 val grpcVersion = "1.53.0"
@@ -10,8 +10,6 @@ val grpcKotlinVersion = "1.3.0"
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.8.10"
     id("com.google.protobuf") version "0.9.2"
-
-    id("org.graalvm.buildtools.native") version "0.9.20"
 }
 
 group = "site.hegemonies"
@@ -29,7 +27,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
 
     // Grpc
-//    api("io.grpc:grpc-stub:$grpcVersion")
     implementation("com.google.protobuf:protobuf-java-util:$protobufUtilsVersion")
     implementation("com.google.protobuf:protobuf-kotlin:$protobufUtilsVersion")
     implementation("io.grpc:grpc-protobuf:$grpcVersion")
@@ -40,10 +37,6 @@ dependencies {
 
     // Java
     api("javax.annotation:javax.annotation-api:1.3.2")
-}
-
-java {
-    withSourcesJar()
 }
 
 protobuf {
@@ -61,6 +54,9 @@ protobuf {
     }
     generateProtoTasks {
         all().forEach {
+            it.generateDescriptorSet = true
+            it.descriptorSetOptions.includeImports = true
+
             it.builtins {
                 create("kotlin")
             }
@@ -70,13 +66,6 @@ protobuf {
                 id("grpckt")
             }
         }
-    }
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
     }
 }
 

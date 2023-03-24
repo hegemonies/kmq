@@ -3,7 +3,7 @@ syntax = "proto3";
 package kmq.queue.message;
 
 option java_multiple_files = true;
-option java_package = "kmq.queue";
+option java_package = "site.hegemonies.kmq.queue.contract";
 
 message CreateQueueRequest {
   string queue_name = 1;

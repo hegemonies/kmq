@@ -3,7 +3,7 @@ syntax = "proto3";
 package kmq.queue.service;
 
 option java_multiple_files = true;
-option java_package = "kmq.queue";
+option java_package = "site.hegemonies.kmq.queue.contract";
 
 import 'queue/message/message.proto';
 
