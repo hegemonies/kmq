@@ -99,3 +99,23 @@ jib {
         image = "hegemonies/kmq:$version"
     }
 }
+
+graalvmNative {
+    binaries {
+        all {
+            resources.autodetect()
+            imageName.set("app")
+            buildArgs.add("--verbose")
+            buildArgs.add("--add-opens=java.base/java.nio=ALL-UNNAMED")
+            buildArgs.add("--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED")
+            buildArgs.add("--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED")
+            buildArgs.add("--trace-class-initialization=ch.qos.logback.classic.Logger")
+            buildArgs.add("--initialize-at-build-time=org.slf4j.LoggerFactory,ch.qos.logback")
+            buildArgs.add("--initialize-at-run-time=io.netty'")
+        }
+    }
+}
+
+nativeBuild {
+    buildArgs("-H:ReflectionConfigurationFiles=../../../src/main/resources/reflection-config.json")
+}
