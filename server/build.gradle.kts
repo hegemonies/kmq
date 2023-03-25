@@ -47,6 +47,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$coroutineVersion")
 
+    // json
+    implementation("com.google.code.gson:gson:2.10.1")
+
     // grpc
     implementation("io.grpc:grpc-netty:$grpcVersion")
     implementation("io.grpc:grpc-netty-shaded:$grpcVersion")

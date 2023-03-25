@@ -21,7 +21,7 @@ jobs:
         run: ./gradlew proto-compiler:build
 
       - name: build jvm-mode docker image
-        run: ./gradlew jib
+        run: ./gradlew server:jib
 
       - name: build native docker image
         run: ./gradlew bootBuildImage
