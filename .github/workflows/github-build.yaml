@@ -17,6 +17,7 @@ jobs:
           version: '22.1.0'
           java-version: '17'
           components: 'native-image'
+          cache: 'gradle'
       - name: login to docker hub
         uses: docker/login-action@v2
         with:
