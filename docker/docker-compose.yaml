@@ -1,0 +1,10 @@
+services:
+  kmq:
+    image: hegemonies/kmq:0.0.1
+    container_name: kmq
+    restart: always
+    environment:
+      JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Xmx384m
+    ports:
+      - "8080:8080"
+      - "9090:9090"

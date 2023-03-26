@@ -17,13 +17,13 @@ class QueueService(
         queueStorage.create(name, capacity)
 
     override suspend fun sendMessage(queueName: String, message: Message): Result<Unit> {
-        logger.info { "Send message to queue=$queueName, message_size=${message.body.length}" }
+        logger.debug { "Send message to queue=$queueName, message_size=${message.body.length}" }
         val queue: Queue = queueStorage.get(queueName).getOrElse { error -> return Result.failure(error) }
         return runCatching { queue.send(message) }
     }
 
     override suspend fun receiveLastMessage(queueName: String): Result<Message> {
-        logger.info { "Receive message from queue=$queueName" }
+        logger.debug { "Receive message from queue=$queueName" }
         val queue: Queue = queueStorage.get(queueName).getOrElse { error -> return Result.failure(error) }
         return runCatching { queue.receive() }
     }
