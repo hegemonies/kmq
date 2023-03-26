@@ -3,6 +3,7 @@ package site.hegemonies.kmq.router.grpc
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import net.devh.boot.grpc.server.service.GrpcService
+import site.hegemonies.kmq.metrics.QueueMetrics
 import site.hegemonies.kmq.queue.contract.CreateQueueRequest
 import site.hegemonies.kmq.queue.contract.CreateQueueResponse
 import site.hegemonies.kmq.queue.contract.ErrorResult
@@ -26,27 +27,32 @@ import site.hegemonies.kmq.service.queue.IQueueService
 @GrpcService
 class QueueGrpcRouter(
     grpcCoroutineScope: CoroutineScope,
-    private val queueService: IQueueService
+    private val queueService: IQueueService,
+    private val queueMetrics: QueueMetrics
 ) : QueueServiceGrpcKt.QueueServiceCoroutineImplBase(grpcCoroutineScope.coroutineContext) {
 
     override suspend fun createQueue(request: CreateQueueRequest): CreateQueueResponse {
         queueService.createQueue(request.queueName, request.capacity)
+        queueMetrics.incrementCountQueue()
         return createQueueResponse { result = makeSuccessResponse() }
     }
 
     override suspend fun sendMessage(request: SendMessageRequest): SendMessageResponse {
         queueService.sendMessage(request.queueName, request.message)
+        queueMetrics.incrementMessageInQueue(request.queueName)
         return sendMessageResponse { result = makeSuccessResponse() }
     }
 
     override suspend fun sendStreamMessages(requests: Flow<SendMessageRequest>): SendMessageResponse {
-        return super.sendStreamMessages(requests)
+        requests.collect { request -> sendMessage(request) }
+        return sendMessageResponse { result = makeSuccessResponse() }
     }
 
     override suspend fun receiveLastMessage(request: ReceiveLastMessageRequest): ReceiveLastMessageResponse {
         val m = queueService.receiveLastMessage(request.queueName).getOrElse { error ->
             return receiveLastMessageResponse { result = makeErrorResponse(error) }
         }
+        queueMetrics.decrementMessageInQueue(request.queueName)
 
         return receiveLastMessageResponse {
             message = m

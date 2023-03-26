@@ -1,4 +1,4 @@
-package site.hegemonies.kmq.configuration
+package site.hegemonies.kmq.configuration.grpc
 
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.context.annotation.Configuration
@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration
         net.devh.boot.grpc.server.autoconfigure.GrpcServerFactoryAutoConfiguration::class,
         net.devh.boot.grpc.server.autoconfigure.GrpcServerMetricAutoConfiguration::class,
         net.devh.boot.grpc.server.autoconfigure.GrpcServerSecurityAutoConfiguration::class,
-        net.devh.boot.grpc.server.autoconfigure.GrpcServerTraceAutoConfiguration::class,
+        net.devh.boot.grpc.server.autoconfigure.GrpcServerTraceAutoConfiguration::class
     ]
 )
 class GrpcConfiguration
