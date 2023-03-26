@@ -1,6 +1,7 @@
 package site.hegemonies.kmq.metrics
 
 import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.Tag
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
@@ -27,7 +28,10 @@ class QueueMetrics(
     }
 
     fun incrementMessageInQueue(queueName: String) {
-        fun newGauge(): AtomicLong? = meterRegistry.gauge(QUEUE_COUNTERS_METRIC_NAME, AtomicLong())
+        fun newGauge(): AtomicLong? = meterRegistry.gauge(
+            QUEUE_COUNTERS_METRIC_NAME, listOf(Tag.of("queue_name", queueName)), AtomicLong()
+        )
+
         val metric = queueCounterMetrics.getOrPut(queueName) { newGauge() }
         metric.incrementAndGet()
     }
