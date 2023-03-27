@@ -22,7 +22,7 @@ jobs:
         run: ./gradlew proto-compiler:build
 
       - name: build jvm-mode docker image
-        run: ./gradlew server:jibВИ
+        run: ./gradlew server:jibDB
       - name: push docker image
         run: docker push hegemonies/kmq:0.0.1
       - name: build and push jvm-mode latest version docker image
