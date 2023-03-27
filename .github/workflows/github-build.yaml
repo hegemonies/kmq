@@ -21,7 +21,9 @@ jobs:
       - name: build proto contracts
         run: ./gradlew proto-compiler:build
 
-      - name: build and push jvm-mode docker image
-        run: ./gradlew server:jib
+      - name: build jvm-mode docker image
+        run: ./gradlew server:jibВИ
+      - name: push docker image
+        run: docker push hegemonies/kmq:0.0.1
       - name: build and push jvm-mode latest version docker image
         run: docker tag hegemonies/kmq:0.0.1 hegemonies/kmq:latest && docker push hegemonies/kmq:latest
