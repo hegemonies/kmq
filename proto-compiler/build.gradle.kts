@@ -1,14 +1,14 @@
 import com.google.protobuf.gradle.id
 import com.google.protobuf.gradle.protobuf
 
-val coroutineVersion = "1.7.0-Beta"
-val grpcVersion = "1.53.0"
+val coroutineVersion = "1.7.0-RC"
+val grpcVersion = "1.54.1"
 val protobufVersion = "0.9.2"
-val protobufUtilsVersion = "3.22.2"
+val protobufUtilsVersion = "3.22.3"
 val grpcKotlinVersion = "1.3.0"
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.8.10"
+    id("org.jetbrains.kotlin.jvm") version "1.8.20"
     id("com.google.protobuf") version "0.9.2"
 }
 
@@ -26,7 +26,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
 
-    // Grpc
+    // gRPC
     implementation("com.google.protobuf:protobuf-java-util:$protobufUtilsVersion")
     implementation("com.google.protobuf:protobuf-kotlin:$protobufUtilsVersion")
     implementation("io.grpc:grpc-protobuf:$grpcVersion")

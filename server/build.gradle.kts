@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.8.10"
+    val kotlinVersion = "1.8.20"
 
-    id("org.springframework.boot") version "3.0.5"
+    id("org.springframework.boot") version "3.0.6"
     id("io.spring.dependency-management") version "1.1.0"
 
     id("org.graalvm.buildtools.native") version "0.9.20"
@@ -19,10 +19,11 @@ group = "site.hegemonies"
 version = "0.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
-val kotlinVersion = "1.8.10"
-val coroutineVersion = "1.7.0-Beta"
-val grpcVersion = "1.53.0"
+val kotlinVersion = "1.8.20"
+val coroutineVersion = "1.7.0-RC"
+val grpcVersion = "1.54.1"
 val grpcKotlinVersion = "1.3.0"
+val protobufUtilsVersion = "3.22.3"
 
 repositories {
     google()
@@ -55,6 +56,8 @@ dependencies {
     implementation("io.grpc:grpc-netty-shaded:$grpcVersion")
     implementation("net.devh:grpc-spring-boot-starter:2.14.0.RELEASE")
     implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
+    implementation("com.google.protobuf:protobuf-java-util:$protobufUtilsVersion")
+    implementation("com.google.protobuf:protobuf-kotlin:$protobufUtilsVersion")
 
     // logger
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")

@@ -29,7 +29,9 @@ class QueueMetrics(
 
     fun incrementMessageInQueue(queueName: String) {
         fun newGauge(): AtomicLong? = meterRegistry.gauge(
-            QUEUE_COUNTERS_METRIC_NAME, listOf(Tag.of("queue_name", queueName)), AtomicLong()
+            QUEUE_COUNTERS_METRIC_NAME,
+            listOf(Tag.of("queue_name", queueName)),
+            AtomicLong()
         )
 
         val metric = queueCounterMetrics.getOrPut(queueName) { newGauge() }

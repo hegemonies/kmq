@@ -4,7 +4,6 @@ import io.grpc.Metadata
 import io.grpc.ServerCall
 import io.grpc.ServerCallHandler
 import io.grpc.ServerInterceptor
-import net.devh.boot.grpc.server.interceptor.GrpcGlobalServerInterceptor
 import org.springframework.context.annotation.Configuration
 import site.hegemonies.kmq.metrics.GrpcMetrics
 
@@ -13,7 +12,7 @@ class GrpcMetricInterceptorConfiguration(
     private val grpcMetrics: GrpcMetrics
 ) {
 
-    @GrpcGlobalServerInterceptor
+//    @GrpcGlobalServerInterceptor
     fun grpcMetricInterceptor() = object : ServerInterceptor {
         override fun <ReqT : Any, RespT : Any> interceptCall(
             call: ServerCall<ReqT, RespT>,
