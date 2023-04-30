@@ -19,7 +19,7 @@ group = "site.hegemonies"
 version = "0.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
-val kotlinVersion = "1.8.20"
+val kotlinVersion = "1.8.21"
 val coroutineVersion = "1.7.0-RC"
 val grpcVersion = "1.54.1"
 val grpcKotlinVersion = "1.3.0"
