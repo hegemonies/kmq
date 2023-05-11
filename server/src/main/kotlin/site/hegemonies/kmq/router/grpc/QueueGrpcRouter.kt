@@ -76,15 +76,6 @@ class QueueGrpcRouter(
         }
     }
 
-//    override suspend fun receiveStreamMessages(request: ReceiveLastMessageRequest): Flow<ReceiveLastMessageResponse> {
-//        return queueService.receiveStreamMessages(request.queueName).map { message ->
-//            receiveLastMessageResponse {
-//                this.message = message
-//                result = makeSuccessResponse()
-//            }
-//        }
-//    }
-
     override fun receiveStreamMessages(request: ReceiveLastMessageRequest): Flow<ReceiveLastMessageResponse> {
         return queueService.receiveStreamMessages(request.queueName).map { message ->
             receiveLastMessageResponse {

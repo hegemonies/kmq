@@ -29,7 +29,15 @@ class QueueHttpRouter(
         accept(MediaType.APPLICATION_JSON).nest {
             POST("/api/v2/queue/{methodName}") { request ->
                 val methodName = request.pathVariable("methodName")
-                queueHttpGateway.handle(methodName, request)
+                when {
+                    methodName.startsWith("sendStream") ->
+                        queueHttpGateway.handleInputStream(methodName, request)
+
+                    methodName.startsWith("receiveStream") ->
+                        queueHttpGateway.handleOutputStream(methodName, request)
+
+                    else -> queueHttpGateway.handle(methodName, request)
+                }
             }
         }
     }
