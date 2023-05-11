@@ -15,3 +15,4 @@ Kotlin Message Queue
 9. [ ] Security support
 10. [ ] Persistence support
 11. [ ] Shared channels
+12. [ ] Swagger
