@@ -11,7 +11,7 @@ plugins {
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
 
-    id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
     id("com.google.cloud.tools.jib") version "3.3.1"
 }
 
@@ -20,10 +20,10 @@ version = "0.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 val kotlinVersion = "1.8.21"
-val coroutineVersion = "1.7.0-RC"
-val grpcVersion = "1.54.1"
+val coroutineVersion = "1.7.0"
+val grpcVersion = "1.55.1"
 val grpcKotlinVersion = "1.3.0"
-val protobufUtilsVersion = "3.22.3"
+val protobufUtilsVersion = "3.23.0"
 
 repositories {
     google()

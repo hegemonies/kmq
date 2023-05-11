@@ -1,15 +1,14 @@
 import com.google.protobuf.gradle.id
 import com.google.protobuf.gradle.protobuf
 
-val coroutineVersion = "1.7.0-RC"
-val grpcVersion = "1.54.1"
-val protobufVersion = "0.9.2"
-val protobufUtilsVersion = "3.22.3"
+val coroutineVersion = "1.7.0"
+val grpcVersion = "1.55.1"
+val protobufUtilsVersion = "3.23.0"
 val grpcKotlinVersion = "1.3.0"
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.8.20"
-    id("com.google.protobuf") version "0.9.2"
+    id("org.jetbrains.kotlin.jvm") version "1.8.21"
+    id("com.google.protobuf") version "0.9.3"
 }
 
 group = "site.hegemonies"
