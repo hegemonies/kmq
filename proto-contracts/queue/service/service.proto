@@ -18,6 +18,6 @@ service QueueService {
   // receive
   rpc receiveLastMessage(message.ReceiveLastMessageRequest) returns (message.ReceiveLastMessageResponse);
   rpc receiveLastBatchMessages(message.ReceiveLastBatchMessagesRequest) returns (message.ReceiveLastBatchMessagesResponse);
-  rpc receiveStreamMessages(stream message.ReceiveLastMessageRequest) returns (message.ReceiveLastMessageResponse);
+  rpc receiveStreamMessages(message.ReceiveLastMessageRequest) returns (stream message.ReceiveLastMessageResponse);
   rpc receiveMessageByIndex(message.ReceiveMessageByIndexRequest) returns (message.ReceiveMessageByIndexResponse);
 }

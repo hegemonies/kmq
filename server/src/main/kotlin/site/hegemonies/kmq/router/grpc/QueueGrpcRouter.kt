@@ -2,6 +2,7 @@ package site.hegemonies.kmq.router.grpc
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import net.devh.boot.grpc.server.service.GrpcService
 import site.hegemonies.kmq.metrics.QueueMetrics
 import site.hegemonies.kmq.queue.contract.CreateQueueRequest
@@ -18,6 +19,7 @@ import site.hegemonies.kmq.queue.contract.SendMessageRequest
 import site.hegemonies.kmq.queue.contract.SendMessageResponse
 import site.hegemonies.kmq.queue.contract.createQueueResponse
 import site.hegemonies.kmq.queue.contract.errorResult
+import site.hegemonies.kmq.queue.contract.receiveLastBatchMessagesResponse
 import site.hegemonies.kmq.queue.contract.receiveLastMessageResponse
 import site.hegemonies.kmq.queue.contract.responseResult
 import site.hegemonies.kmq.queue.contract.sendMessageResponse
@@ -49,23 +51,47 @@ class QueueGrpcRouter(
     }
 
     override suspend fun receiveLastMessage(request: ReceiveLastMessageRequest): ReceiveLastMessageResponse {
-        val m = queueService.receiveLastMessage(request.queueName).getOrElse { error ->
+        val message = queueService.receiveLastMessage(request.queueName).getOrElse { error ->
             return receiveLastMessageResponse { result = makeErrorResponse(error) }
         }
         queueMetrics.decrementMessageInQueue(request.queueName)
 
         return receiveLastMessageResponse {
-            message = m
+            this.message = message
             result = makeSuccessResponse()
         }
     }
 
-    override suspend fun receiveLastBatchMessages(request: ReceiveLastBatchMessagesRequest): ReceiveLastBatchMessagesResponse {
-        return super.receiveLastBatchMessages(request)
+    override suspend fun receiveLastBatchMessages(
+        request: ReceiveLastBatchMessagesRequest
+    ): ReceiveLastBatchMessagesResponse {
+        val messages = queueService.receiveLastBatchMessage(request.queueName, request.amount).getOrElse { error ->
+            return receiveLastBatchMessagesResponse { result = makeErrorResponse(error) }
+        }
+        queueMetrics.decrementMessagesInQueue(request.queueName, request.amount)
+
+        return receiveLastBatchMessagesResponse {
+            result = makeSuccessResponse()
+            this.messages += messages
+        }
     }
 
-    override suspend fun receiveStreamMessages(requests: Flow<ReceiveLastMessageRequest>): ReceiveLastMessageResponse {
-        return super.receiveStreamMessages(requests)
+//    override suspend fun receiveStreamMessages(request: ReceiveLastMessageRequest): Flow<ReceiveLastMessageResponse> {
+//        return queueService.receiveStreamMessages(request.queueName).map { message ->
+//            receiveLastMessageResponse {
+//                this.message = message
+//                result = makeSuccessResponse()
+//            }
+//        }
+//    }
+
+    override fun receiveStreamMessages(request: ReceiveLastMessageRequest): Flow<ReceiveLastMessageResponse> {
+        return queueService.receiveStreamMessages(request.queueName).map { message ->
+            receiveLastMessageResponse {
+                this.message = message
+                result = makeSuccessResponse()
+            }
+        }
     }
 
     override suspend fun receiveMessageByIndex(request: ReceiveMessageByIndexRequest): ReceiveMessageByIndexResponse {

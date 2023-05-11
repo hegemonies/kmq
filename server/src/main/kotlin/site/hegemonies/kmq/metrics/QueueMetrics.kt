@@ -43,6 +43,11 @@ class QueueMetrics(
         metric.decrementAndGet()
     }
 
+    fun decrementMessagesInQueue(queueName: String, amount: Int) {
+        val metric = queueCounterMetrics[queueName] ?: return
+        (0 until amount).forEach { _ -> metric.decrementAndGet() }
+    }
+
     fun incrementCountQueue() {
         queueCount?.incrementAndGet()
     }

@@ -57,7 +57,6 @@ class QueueHttpRouter(
         return sendMessageResponse { result = makeSuccessResponse() }
     }
 
-
     private fun makeSuccessResponse() =
         responseResult { success = successResult { success = true } }
 

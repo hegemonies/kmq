@@ -1,5 +1,6 @@
 package site.hegemonies.kmq.service.queue
 
+import kotlinx.coroutines.flow.Flow
 import mu.KLogging
 import org.springframework.stereotype.Service
 import site.hegemonies.kmq.model.Queue
@@ -26,5 +27,19 @@ class QueueService(
         logger.debug { "Receive message from queue=$queueName" }
         val queue: Queue = queueStorage.get(queueName).getOrElse { error -> return Result.failure(error) }
         return runCatching { queue.receive() }
+    }
+
+    override suspend fun receiveLastBatchMessage(queueName: String, amount: Int): Result<List<Message>> {
+        logger.debug { "Receive batch messages from queue=$queueName" }
+        val queue: Queue = queueStorage.get(queueName).getOrElse { error -> return Result.failure(error) }
+        return runCatching {
+            (0 until amount).map { queue.receive() }
+        }
+    }
+
+    override fun receiveStreamMessages(queueName: String): Flow<Message> {
+        logger.debug { "Receive stream messages from queue=$queueName" }
+        val queue: Queue = queueStorage.get(queueName).getOrThrow()
+        return queue.stream()
     }
 }
