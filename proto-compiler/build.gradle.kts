@@ -1,7 +1,7 @@
 import com.google.protobuf.gradle.id
 import com.google.protobuf.gradle.protobuf
 
-val coroutineVersion = "1.7.0"
+val coroutineVersion = "1.7.1"
 val grpcVersion = "1.55.1"
 val protobufUtilsVersion = "3.23.0"
 val grpcKotlinVersion = "1.3.0"
