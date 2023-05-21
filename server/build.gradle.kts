@@ -3,16 +3,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     val kotlinVersion = "1.8.21"
 
-    id("org.springframework.boot") version "3.0.6"
+    id("org.springframework.boot") version "3.1.0"
     id("io.spring.dependency-management") version "1.1.0"
-
-    id("org.graalvm.buildtools.native") version "0.9.20"
 
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
 
     id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
-    id("com.google.cloud.tools.jib") version "3.3.1"
+    id("com.google.cloud.tools.jib") version "3.3.2"
 }
 
 group = "site.hegemonies"
@@ -99,24 +97,4 @@ jib {
     to {
         image = "hegemonies/kmq:$version"
     }
-}
-
-graalvmNative {
-    binaries {
-        all {
-            resources.autodetect()
-            imageName.set("app")
-            buildArgs.add("--verbose")
-            buildArgs.add("--add-opens=java.base/java.nio=ALL-UNNAMED")
-            buildArgs.add("--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED")
-            buildArgs.add("--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED")
-            buildArgs.add("--trace-class-initialization=ch.qos.logback.classic.Logger")
-            buildArgs.add("--initialize-at-build-time=org.slf4j.LoggerFactory,ch.qos.logback")
-            buildArgs.add("--initialize-at-run-time=io.netty'")
-        }
-    }
-}
-
-nativeBuild {
-    buildArgs("-H:ReflectionConfigurationFiles=../../../src/main/resources/reflection-config.json")
 }
