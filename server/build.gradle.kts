@@ -75,6 +75,7 @@ dependencies {
 
     // utils
     runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.90.Final:osx-aarch_64")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.withType<KotlinCompile> {
@@ -97,4 +98,7 @@ jib {
     to {
         image = "hegemonies/kmq:$version"
     }
+}
+kotlin {
+    jvmToolchain(11)
 }

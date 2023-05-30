@@ -79,3 +79,9 @@ message ResponseResult {
     ErrorResult error = 2;
   }
 }
+
+enum QueueType {
+  INVALID_QUEUE_TYPE = 0;
+  CHANNEL = 1; // for one subscriber
+  SHARED = 2; // for many subscribers
+}
