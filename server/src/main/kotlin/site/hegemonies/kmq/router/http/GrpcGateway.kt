@@ -4,7 +4,6 @@ import com.google.protobuf.Message
 import com.google.protobuf.util.JsonFormat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.web.reactive.function.server.ServerRequest
@@ -54,7 +53,7 @@ interface GrpcGatewayMethod {
     }
 
     suspend fun mapStream(request: ServerRequest): Flow<Message> {
-        return request.bodyToFlow<String>().map {  body ->
+        return request.bodyToFlow<String>().map { body ->
             val builder = getProtoRequestMessageBuilder()
             JsonFormat.parser().merge(body, builder)
             builder.build()

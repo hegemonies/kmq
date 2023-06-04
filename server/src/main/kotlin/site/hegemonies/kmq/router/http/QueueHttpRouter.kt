@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.reactive.function.server.coRouter
 import site.hegemonies.kmq.queue.contract.CreateQueueResponse
 import site.hegemonies.kmq.queue.contract.ErrorResult
+import site.hegemonies.kmq.queue.contract.QueueType
 import site.hegemonies.kmq.queue.contract.SendMessageRequest
 import site.hegemonies.kmq.queue.contract.SendMessageResponse
 import site.hegemonies.kmq.queue.contract.createQueueResponse
@@ -45,9 +46,11 @@ class QueueHttpRouter(
     @GetMapping("/api/v1/queue/create-queue")
     suspend fun createQueue(
         @RequestParam("queueName") queueName: String,
-        @RequestParam("capacity") capacity: Int
+        @RequestParam("capacity") capacity: Int,
+        @RequestParam("persist") persist: Boolean,
+        @RequestParam("type") type: String
     ): CreateQueueResponse {
-        queueService.createQueue(queueName, capacity).onFailure { error ->
+        queueService.createQueue(queueName, capacity, persist, QueueType.valueOf(type)).onFailure { error ->
             return createQueueResponse { result = makeErrorResponse(error) }
         }
 
