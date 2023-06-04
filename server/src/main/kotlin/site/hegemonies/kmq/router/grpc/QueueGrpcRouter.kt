@@ -34,7 +34,7 @@ class QueueGrpcRouter(
 ) : QueueServiceGrpcKt.QueueServiceCoroutineImplBase(grpcCoroutineScope.coroutineContext) {
 
     override suspend fun createQueue(request: CreateQueueRequest): CreateQueueResponse {
-        queueService.createQueue(request.queueName, request.capacity)
+        queueService.createQueue(request.queueName, request.capacity, request.persist, request.type)
         queueMetrics.incrementCountQueue()
         return createQueueResponse { result = makeSuccessResponse() }
     }
@@ -57,7 +57,7 @@ class QueueGrpcRouter(
         queueMetrics.decrementMessageInQueue(request.queueName)
 
         return receiveLastMessageResponse {
-            this.message = message
+            if (message != null) this.message = message
             result = makeSuccessResponse()
         }
     }

@@ -35,9 +35,8 @@ class QueueHttpGateway(
                 request as CreateQueueRequest
 
                 queueMetrics.incrementCountQueue()
-                queueService.createQueue(request.queueName, request.capacity).onFailure { error ->
-                    return makeErrorResponse(error)
-                }
+                queueService.createQueue(request.queueName, request.capacity, request.persist, request.type)
+                    .onFailure { error -> return makeErrorResponse(error) }
 
                 return createQueueResponse {
                     result = responseResult { makeSuccessResponse() }
@@ -100,7 +99,7 @@ class QueueHttpGateway(
                 queueMetrics.decrementMessageInQueue(request.queueName)
 
                 return receiveLastMessageResponse {
-                    this.message = message
+                    if (message != null) this.message = message
                     result = makeSuccessResponse()
                 }
             }

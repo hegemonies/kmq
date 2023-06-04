@@ -9,7 +9,6 @@ val grpcKotlinVersion = "1.3.0"
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.8.21"
     id("com.google.protobuf") version "0.9.3"
-    kotlin("jvm") version "1.8.21"
 }
 
 group = "site.hegemonies"
@@ -72,7 +71,4 @@ protobuf {
 // Make protoc work on macOS
 fun protocClassifier(): String {
     return if (System.getProperty("os.name", "").startsWith("Mac")) "osx-x86_64" else ""
-}
-kotlin {
-    jvmToolchain(11)
 }
