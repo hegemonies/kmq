@@ -27,12 +27,18 @@ class QueueStorage(
         }
     }
 
-    override fun create(name: String, capacity: Int, persist: Boolean, type: QueueType): Result<Unit> {
+    override fun create(name: String, capacity: Int, persist: Boolean, type: QueueType, ifNotExists: Boolean): Result<Boolean> {
         logger.info { "Creating queue: name=$name, capacity=$capacity" }
+
+        if (storage[name] != null && ifNotExists) {
+            return Result.success(false)
+        }
 
         return runCatching {
             val queue = queueFactory.createQueue(name, capacity, persist, type)
             storage[name] = queue
+
+            true
         }
     }
 

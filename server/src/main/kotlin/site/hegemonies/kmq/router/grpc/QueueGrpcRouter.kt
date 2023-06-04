@@ -34,8 +34,14 @@ class QueueGrpcRouter(
 ) : QueueServiceGrpcKt.QueueServiceCoroutineImplBase(grpcCoroutineScope.coroutineContext) {
 
     override suspend fun createQueue(request: CreateQueueRequest): CreateQueueResponse {
-        queueService.createQueue(request.queueName, request.capacity, request.persist, request.type)
-        queueMetrics.incrementCountQueue()
+        with(request) {
+            val created = queueService.createQueue(queueName, capacity, persist, type, ifNotExists).getOrElse { error ->
+                return createQueueResponse { result = makeErrorResponse(error) }
+            }
+
+            if (created) queueMetrics.incrementCountQueue()
+        }
+
         return createQueueResponse { result = makeSuccessResponse() }
     }
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.reactive.function.server.coRouter
+import site.hegemonies.kmq.metrics.QueueMetrics
 import site.hegemonies.kmq.queue.contract.CreateQueueResponse
 import site.hegemonies.kmq.queue.contract.ErrorResult
 import site.hegemonies.kmq.queue.contract.QueueType
@@ -22,7 +23,8 @@ import site.hegemonies.kmq.service.queue.QueueService
 
 @RestController
 class QueueHttpRouter(
-    private val queueService: QueueService
+    private val queueService: QueueService,
+    private val queueMetrics: QueueMetrics
 ) {
 
     @Bean
@@ -48,11 +50,15 @@ class QueueHttpRouter(
         @RequestParam("queueName") queueName: String,
         @RequestParam("capacity") capacity: Int,
         @RequestParam("persist") persist: Boolean,
-        @RequestParam("type") type: String
+        @RequestParam("type") type: String,
+        @RequestParam("ifNotExists") ifNotExists: Boolean
     ): CreateQueueResponse {
-        queueService.createQueue(queueName, capacity, persist, QueueType.valueOf(type)).onFailure { error ->
-            return createQueueResponse { result = makeErrorResponse(error) }
-        }
+        val created = queueService.createQueue(queueName, capacity, persist, QueueType.valueOf(type), ifNotExists)
+            .getOrElse { error ->
+                return createQueueResponse { result = makeErrorResponse(error) }
+            }
+
+        if (created) queueMetrics.incrementCountQueue()
 
         return createQueueResponse { result = makeSuccessResponse() }
     }

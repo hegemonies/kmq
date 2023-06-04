@@ -10,6 +10,8 @@ message CreateQueueRequest {
   uint32 capacity = 2;
   bool persist = 3;
   QueueType type = 4;
+  // if queue not exists then do nothing
+  bool ifNotExists = 5;
 }
 
 message CreateQueueResponse {

@@ -5,7 +5,7 @@ import site.hegemonies.kmq.queue.contract.Message
 import site.hegemonies.kmq.queue.contract.QueueType
 
 interface IQueueService {
-    fun createQueue(name: String, capacity: Int, persist: Boolean, type: QueueType): Result<Unit>
+    fun createQueue(name: String, capacity: Int, persist: Boolean, type: QueueType, ifNotExists: Boolean): Result<Boolean>
     suspend fun sendMessage(queueName: String, message: Message): Result<Unit>
     suspend fun receiveLastMessage(queueName: String): Result<Message?>
     suspend fun receiveLastBatchMessage(queueName: String, amount: Int): Result<List<Message>>

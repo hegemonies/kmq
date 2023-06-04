@@ -15,8 +15,8 @@ class QueueService(
 
     private companion object : KLogging()
 
-    override fun createQueue(name: String, capacity: Int, persist: Boolean, type: QueueType): Result<Unit> =
-        queueStorage.create(name, capacity, persist, type)
+    override fun createQueue(name: String, capacity: Int, persist: Boolean, type: QueueType, ifNotExists: Boolean): Result<Boolean> =
+        queueStorage.create(name, capacity, persist, type, ifNotExists)
 
     override suspend fun sendMessage(queueName: String, message: Message): Result<Unit> {
         logger.debug { "Send message to queue=$queueName, message_size=${message.body.length}" }

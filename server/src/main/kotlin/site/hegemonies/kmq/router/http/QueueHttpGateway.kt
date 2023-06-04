@@ -34,9 +34,12 @@ class QueueHttpGateway(
             override suspend fun handle(request: Message): Message {
                 request as CreateQueueRequest
 
-                queueMetrics.incrementCountQueue()
-                queueService.createQueue(request.queueName, request.capacity, request.persist, request.type)
-                    .onFailure { error -> return makeErrorResponse(error) }
+                with (request) {
+                    val created = queueService.createQueue(queueName, capacity, persist, type, ifNotExists)
+                        .getOrElse { error -> return makeErrorResponse(error) }
+
+                    if (created) queueMetrics.incrementCountQueue()
+                }
 
                 return createQueueResponse {
                     result = responseResult { makeSuccessResponse() }
