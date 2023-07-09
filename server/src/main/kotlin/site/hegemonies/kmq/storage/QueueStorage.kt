@@ -30,7 +30,7 @@ class QueueStorage(
     override fun create(name: String, capacity: Int, persist: Boolean, type: QueueType, ifNotExists: Boolean): Result<Boolean> {
         logger.info { "Creating queue: name=$name, capacity=$capacity" }
 
-        if (storage[name] != null && ifNotExists) {
+        if (storage[name] != null && !ifNotExists) {
             return Result.success(false)
         }
 
