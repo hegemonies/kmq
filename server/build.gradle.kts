@@ -1,15 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.8.21"
+    val kotlinVersion = "1.9.0"
 
-    id("org.springframework.boot") version "3.1.0"
+    id("org.springframework.boot") version "3.1.1"
     id("io.spring.dependency-management") version "1.1.0"
 
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
 
-    id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
+    id("org.jlleitschuh.gradle.ktlint") version "11.5.0"
     id("com.google.cloud.tools.jib") version "3.3.2"
 }
 
@@ -17,11 +17,11 @@ group = "site.hegemonies"
 version = "0.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
-val kotlinVersion = "1.8.21"
-val coroutineVersion = "1.7.1"
-val grpcVersion = "1.55.1"
+val kotlinVersion = "1.9.0"
+val coroutineVersion = "1.7.2"
+val grpcVersion = "1.56.1"
 val grpcKotlinVersion = "1.3.0"
-val protobufUtilsVersion = "3.23.0"
+val protobufUtilsVersion = "3.23.4"
 
 repositories {
     google()
