@@ -19,7 +19,7 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 
 val kotlinVersion = "1.9.0"
 val coroutineVersion = "1.7.3"
-val grpcVersion = "1.57.1"
+val grpcVersion = "1.57.2"
 val grpcKotlinVersion = "1.3.0"
 val protobufUtilsVersion = "3.23.4"
 
@@ -82,7 +82,6 @@ tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "17"
-        useK2 = true
     }
 }
 
