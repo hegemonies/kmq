@@ -21,7 +21,7 @@ val kotlinVersion = "1.9.0"
 val coroutineVersion = "1.7.3"
 val grpcVersion = "1.57.2"
 val grpcKotlinVersion = "1.3.0"
-val protobufUtilsVersion = "3.23.4"
+val protobufUtilsVersion = "3.24.0"
 
 repositories {
     google()

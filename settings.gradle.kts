@@ -1,2 +1,2 @@
 rootProject.name = "kmq"
-include("proto-compiler", "server")
+include("proto-compiler", "server", "client")

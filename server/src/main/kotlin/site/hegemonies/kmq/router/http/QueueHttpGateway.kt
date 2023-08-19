@@ -34,7 +34,7 @@ class QueueHttpGateway(
             override suspend fun handle(request: Message): Message {
                 request as CreateQueueRequest
 
-                with (request) {
+                with(request) {
                     val created = queueService.createQueue(queueName, capacity, persist, type, ifNotExists)
                         .getOrElse { error -> return makeErrorResponse(error) }
 
