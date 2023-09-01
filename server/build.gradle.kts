@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.9.0"
+    val kotlinVersion = "1.9.10"
 
-    id("org.springframework.boot") version "3.1.2"
+    id("org.springframework.boot") version "3.1.3"
     id("io.spring.dependency-management") version "1.1.2"
 
     kotlin("jvm") version kotlinVersion
@@ -17,11 +17,11 @@ group = "site.hegemonies"
 version = "0.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
-val kotlinVersion = "1.9.0"
+val kotlinVersion = "1.9.10"
 val coroutineVersion = "1.7.3"
 val grpcVersion = "1.57.2"
 val grpcKotlinVersion = "1.3.0"
-val protobufUtilsVersion = "3.23.4"
+val protobufUtilsVersion = "3.24.2"
 
 repositories {
     google()
