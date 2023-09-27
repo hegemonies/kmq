@@ -10,7 +10,7 @@ plugins {
     kotlin("plugin.spring") version kotlinVersion
 
     id("org.jlleitschuh.gradle.ktlint") version "11.5.0"
-    id("com.google.cloud.tools.jib") version "3.3.2"
+    id("com.google.cloud.tools.jib") version "3.4.0"
 }
 
 group = "site.hegemonies"
@@ -91,7 +91,7 @@ tasks.withType<Test> {
 
 jib {
     from {
-        image = "azul/zulu-openjdk:17-latest"
+        image = "azul/zulu-openjdk:21-latest"
     }
 
     to {
