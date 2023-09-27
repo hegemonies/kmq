@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     val kotlinVersion = "1.9.10"
 
-    id("org.springframework.boot") version "3.1.3"
-    id("io.spring.dependency-management") version "1.1.2"
+    id("org.springframework.boot") version "3.1.4"
+    id("io.spring.dependency-management") version "1.1.3"
 
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
@@ -20,8 +20,8 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 val kotlinVersion = "1.9.10"
 val coroutineVersion = "1.7.3"
 val grpcVersion = "1.57.2"
-val grpcKotlinVersion = "1.3.0"
-val protobufUtilsVersion = "3.24.2"
+val grpcKotlinVersion = "1.3.1"
+val protobufUtilsVersion = "3.24.3"
 
 repositories {
     google()
@@ -51,11 +51,13 @@ dependencies {
 
     // grpc
     implementation("io.grpc:grpc-netty:$grpcVersion")
-    implementation("io.grpc:grpc-netty-shaded:$grpcVersion")
+    runtimeOnly("io.grpc:grpc-netty-shaded:$grpcVersion")
     implementation("net.devh:grpc-spring-boot-starter:2.14.0.RELEASE")
     implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
     implementation("com.google.protobuf:protobuf-java-util:$protobufUtilsVersion")
     implementation("com.google.protobuf:protobuf-kotlin:$protobufUtilsVersion")
+
+    compileOnly("org.apache.tomcat:annotations-api:6.0.53")
 
     // logger
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
@@ -99,5 +101,5 @@ jib {
     }
 }
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
 }
